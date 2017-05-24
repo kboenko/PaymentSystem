@@ -1,0 +1,53 @@
+ 
+CREATE TABLE accounts
+(
+  id bigserial NOT NULL,
+  phone character varying(50) NOT NULL,
+  password character varying(250) NOT NULL,
+  email character varying(250),
+  balance integer DEFAULT 100,
+  role character varying(50) DEFAULT 'ROLE_USER'::character varying,
+  CONSTRAINT pk_accounts PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE accounts
+  OWNER TO action;
+
+  
+  CREATE TABLE payments
+(
+  id bigserial NOT NULL,
+  account_id bigint,
+  service_id bigint,
+  date timestamp without time zone,
+  sum integer,
+  CONSTRAINT pk_payments PRIMARY KEY (id),
+  CONSTRAINT fk_accounts FOREIGN KEY (account_id)
+      REFERENCES accounts (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_services FOREIGN KEY (service_id)
+      REFERENCES services (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE payments
+  OWNER TO action;
+
+  
+  CREATE TABLE services
+(
+  id bigserial NOT NULL,
+  name character varying(250) NOT NULL,
+  min_pay integer,
+  max_pay integer,
+  CONSTRAINT pk_services PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE services
+  OWNER TO action;
