@@ -84,7 +84,7 @@ public class MainController {
 
     @RequestMapping(value = "/pay", method = RequestMethod.POST)
     @Transactional
-    public String savePayment(MetaPayment metaPayment) {
+    public synchronized String savePayment(MetaPayment metaPayment) {
         Account account = accountRepository.findOne(metaPayment.getAccountId());
         Services service = serviceRepository.findOne(metaPayment.getServiceId());
         Integer sum = metaPayment.getSum();
